@@ -8,4 +8,8 @@
     <ProjectReference Include="..\UpcomingGames.Database\UpcomingGames.Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="IGDB" Version="2.0.1" />
+  </ItemGroup>
+
 </Project>
