@@ -60,28 +60,28 @@ namespace UpcomingGames.Sources.Utils
 					switch (releaseDate.Region)
 					{
 						case ReleaseDateRegion.Worldwide:
-							releaseDates.Worldwide = releaseDateString;
+							releaseDates.Worldwide.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.NorthAmerica:
-							releaseDates.NorthAmerica = releaseDateString;
+							releaseDates.NorthAmerica.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.Europe:
-							releaseDates.Europe = releaseDateString;
+							releaseDates.Europe.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.Australia:
-							releaseDates.Australia = releaseDateString;
+							releaseDates.Australia.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.NewZealand:
-							releaseDates.NewZealand = releaseDateString;
+							releaseDates.NewZealand.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.Japan:
-							releaseDates.Japan = releaseDateString;
+							releaseDates.Japan.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.China:
-							releaseDates.China = releaseDateString;
+							releaseDates.China.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						case ReleaseDateRegion.Asia:
-							releaseDates.Asia = releaseDateString;
+							releaseDates.Asia.Add(releaseDate.Platform.Value.Name, releaseDateString);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(releaseDate.Region));
