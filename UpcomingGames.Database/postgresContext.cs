@@ -44,7 +44,7 @@ namespace UpcomingGames.Database
             {
                 entity.ToTable("company");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -55,8 +55,8 @@ namespace UpcomingGames.Database
             modelBuilder.Entity<GameEntity>(entity =>
             {
                 entity.ToTable("game");
-
-                entity.Property(e => e.Id).HasColumnName("id");
+                
+                entity.Property(e => e.Id).HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CoverUrl).HasColumnName("cover_url");
 
@@ -101,7 +101,7 @@ namespace UpcomingGames.Database
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.CompanyEntity)
                     .WithMany()
@@ -128,7 +128,7 @@ namespace UpcomingGames.Database
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.GameEntity)
                     .WithMany()
@@ -153,7 +153,7 @@ namespace UpcomingGames.Database
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.PlatformId).HasColumnName("platform_id");
 
@@ -180,7 +180,7 @@ namespace UpcomingGames.Database
 
                 entity.Property(e => e.Id)
                     .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                    .HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.ThemeId).HasColumnName("theme_id");
 
@@ -201,7 +201,7 @@ namespace UpcomingGames.Database
             {
                 entity.ToTable("genre");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -213,7 +213,7 @@ namespace UpcomingGames.Database
             {
                 entity.ToTable("platform");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -225,7 +225,7 @@ namespace UpcomingGames.Database
             {
                 entity.ToTable("theme");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id").UseSerialColumn().ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
