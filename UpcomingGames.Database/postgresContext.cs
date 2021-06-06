@@ -50,8 +50,10 @@ namespace UpcomingGames.Database
                     .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("name");
-                
+
                 entity.Property(e => e.LogoUrl).HasColumnName("logo_url");
+
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             modelBuilder.Entity<GameEntity>(entity =>
@@ -92,6 +94,13 @@ namespace UpcomingGames.Database
                 entity.Property(e => e.Urls)
                     .HasColumnType("jsonb")
                     .HasColumnName("urls");
+                
+                entity.HasIndex(e => e.Name);
+                entity.HasIndex(e => e.IgdbId);
+                entity.HasIndex(e => e.IsReleased);
+                entity.HasIndex(e => e.ReleaseDate);
+                entity.HasIndex(e => e.FullReleaseDate);
+
             });
 
             modelBuilder.Entity<GameCompanyEntity>(entity =>
@@ -212,6 +221,8 @@ namespace UpcomingGames.Database
                     .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("name");
+                
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             modelBuilder.Entity<PlatformEntity>(entity =>
@@ -224,6 +235,8 @@ namespace UpcomingGames.Database
                     .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("name");
+                
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             modelBuilder.Entity<ThemeEntity>(entity =>
@@ -236,6 +249,8 @@ namespace UpcomingGames.Database
                     .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("name");
+                
+                entity.HasIndex(e => e.Name).IsUnique();
             });
 
             OnModelCreatingPartial(modelBuilder);
