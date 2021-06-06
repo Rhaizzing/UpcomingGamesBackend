@@ -83,6 +83,9 @@ namespace UpcomingGames.Database
                     .IsRequired()
                     .HasColumnType("jsonb")
                     .HasColumnName("release_date");
+                
+                entity.Property(e => e.FullReleaseDate)
+                    .HasColumnName("full_release_date");
 
                 entity.Property(e => e.Score).HasColumnName("score");
 
