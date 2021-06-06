@@ -2,7 +2,7 @@
 
 namespace UpcomingGames.Database.Entities
 {
-    public partial class Game
+    public partial class GameEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
