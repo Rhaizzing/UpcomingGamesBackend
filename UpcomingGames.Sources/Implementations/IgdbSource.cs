@@ -16,7 +16,7 @@ namespace UpcomingGames.Sources.Implementations
 		private readonly IGDBClient _client;
 
 		private const string FIELDS =
-			"id, name, release_dates.*, release_dates.platform.name, cover.url, age_ratings.*, aggregated_rating, url, websites.*, genres.name, themes.name, involved_companies.company.name";
+			"id, name, release_dates.*, release_dates.platform.name, cover.url, age_ratings.*, aggregated_rating, url, websites.*, genres.name, themes.name, involved_companies.company.name, involved_companies.company.logo.url";
 
 		public IgdbSource(IGDBClient client)
 		{

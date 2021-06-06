@@ -214,7 +214,8 @@ namespace UpcomingGames.Sources.Utils
 			return igdbGame.InvolvedCompanies?.Values?.Select(company =>
 				new CompanyEntity
 				{
-					Name = company.Company.Value.Name
+					Name = company.Company.Value.Name,
+					LogoUrl = company.Company.Value.Logo?.Value?.Url
 				}
 			);
 		}
