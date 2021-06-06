@@ -48,9 +48,23 @@ namespace UpcomingGames.Sources.Implementations
 			});
 		}
 
-		public Task<IEnumerable<FullGameDto>> GetAll(int page, int itemsPerPage)
+		public async Task<IEnumerable<FullGameDto>> GetAll(int page, int itemsPerPage)
 		{
-			throw new NotImplementedException();
+			var query =
+				$"sort first_release_date asc; where status != {(int)GameStatus.Released} & status != {(int)GameStatus.Offline} & status != {(int)GameStatus.Cancelled} & first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()}";
+			
+			const string pagination = "offset {(page - 1) * itemsPerPage}; limit {itemsPerPage}";
+			
+			var igdbGames = await _client.QueryAsync<Game>(IGDBClient.Endpoints.Games, $"{FIELDS}; {query}; {pagination};");
+
+			return igdbGames.Select(igdbGame =>
+			{
+				if (igdbGame.ReleaseDates?.Values?.IsGameFullyReleased() ?? false)
+					return null;
+
+				return new FullGameDto(igdbGame.ConvertFromIgdb(), igdbGame.GetPlatforms(), igdbGame.GetGenres(), 
+					igdbGame.GetThemes(), igdbGame.GetCompanies());
+			});
 		}
 	}
 }
