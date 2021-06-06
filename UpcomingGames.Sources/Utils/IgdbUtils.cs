@@ -90,6 +90,9 @@ namespace UpcomingGames.Sources.Utils
 			}
 
 			upcomingGame.ReleaseDate = JsonSerializer.Serialize(releaseDates);
+			
+			if(igdbGame.FirstReleaseDate is not null)
+				upcomingGame.FullReleaseDate = DateOnly.FromDateTime(igdbGame.FirstReleaseDate.Value.Date);
 
 			if (igdbGame.Cover?.Value is not null)
 				upcomingGame.CoverUrl = igdbGame.Cover.Value.Url;
