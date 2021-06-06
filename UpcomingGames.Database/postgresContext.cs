@@ -18,15 +18,15 @@ namespace UpcomingGames.Database
         {
         }
 
-        public virtual DbSet<Company> Companies { get; set; }
-        public virtual DbSet<Game> Games { get; set; }
-        public virtual DbSet<GameCompany> GameCompanies { get; set; }
-        public virtual DbSet<GameGenre> GameGenres { get; set; }
-        public virtual DbSet<GamePlatform> GamePlatforms { get; set; }
-        public virtual DbSet<GameTheme> GameThemes { get; set; }
-        public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<Platform> Platforms { get; set; }
-        public virtual DbSet<Theme> Themes { get; set; }
+        public virtual DbSet<CompanyEntity> Companies { get; set; }
+        public virtual DbSet<GameEntity> Games { get; set; }
+        public virtual DbSet<GameCompanyEntity> GameCompanies { get; set; }
+        public virtual DbSet<GameGenreEntity> GameGenres { get; set; }
+        public virtual DbSet<GamePlatformEntity> GamePlatforms { get; set; }
+        public virtual DbSet<GameThemeEntity> GameThemes { get; set; }
+        public virtual DbSet<GenreEntity> Genres { get; set; }
+        public virtual DbSet<PlatformEntity> Platforms { get; set; }
+        public virtual DbSet<ThemeEntity> Themes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,7 +40,7 @@ namespace UpcomingGames.Database
         {
             modelBuilder.HasAnnotation("Relational:Collation", "en_US.utf8");
 
-            modelBuilder.Entity<Company>(entity =>
+            modelBuilder.Entity<CompanyEntity>(entity =>
             {
                 entity.ToTable("company");
 
@@ -52,7 +52,7 @@ namespace UpcomingGames.Database
                     .HasColumnName("name");
             });
 
-            modelBuilder.Entity<Game>(entity =>
+            modelBuilder.Entity<GameEntity>(entity =>
             {
                 entity.ToTable("game");
 
@@ -89,7 +89,7 @@ namespace UpcomingGames.Database
                     .HasColumnName("urls");
             });
 
-            modelBuilder.Entity<GameCompany>(entity =>
+            modelBuilder.Entity<GameCompanyEntity>(entity =>
             {
                 entity.HasNoKey();
 
@@ -103,20 +103,20 @@ namespace UpcomingGames.Database
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.HasOne(d => d.Company)
+                entity.HasOne(d => d.CompanyEntity)
                     .WithMany()
                     .HasForeignKey(d => d.CompanyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_company_fk_1");
 
-                entity.HasOne(d => d.Game)
+                entity.HasOne(d => d.GameEntity)
                     .WithMany()
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_company_fk");
             });
 
-            modelBuilder.Entity<GameGenre>(entity =>
+            modelBuilder.Entity<GameGenreEntity>(entity =>
             {
                 entity.HasNoKey();
 
@@ -130,20 +130,20 @@ namespace UpcomingGames.Database
                     .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.HasOne(d => d.Game)
+                entity.HasOne(d => d.GameEntity)
                     .WithMany()
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_genre_fk");
 
-                entity.HasOne(d => d.Genre)
+                entity.HasOne(d => d.GenreEntity)
                     .WithMany()
                     .HasForeignKey(d => d.GenreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_genre_fk_1");
             });
 
-            modelBuilder.Entity<GamePlatform>(entity =>
+            modelBuilder.Entity<GamePlatformEntity>(entity =>
             {
                 entity.HasNoKey();
 
@@ -157,20 +157,20 @@ namespace UpcomingGames.Database
 
                 entity.Property(e => e.PlatformId).HasColumnName("platform_id");
 
-                entity.HasOne(d => d.Game)
+                entity.HasOne(d => d.GameEntity)
                     .WithMany()
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_platform_fk");
 
-                entity.HasOne(d => d.Platform)
+                entity.HasOne(d => d.PlatformEntity)
                     .WithMany()
                     .HasForeignKey(d => d.PlatformId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_platform_fk_1");
             });
 
-            modelBuilder.Entity<GameTheme>(entity =>
+            modelBuilder.Entity<GameThemeEntity>(entity =>
             {
                 entity.HasNoKey();
 
@@ -184,20 +184,20 @@ namespace UpcomingGames.Database
 
                 entity.Property(e => e.ThemeId).HasColumnName("theme_id");
 
-                entity.HasOne(d => d.Game)
+                entity.HasOne(d => d.GameEntity)
                     .WithMany()
                     .HasForeignKey(d => d.GameId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_theme_fk");
 
-                entity.HasOne(d => d.Theme)
+                entity.HasOne(d => d.ThemeEntity)
                     .WithMany()
                     .HasForeignKey(d => d.ThemeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("game_theme_fk_1");
             });
 
-            modelBuilder.Entity<Genre>(entity =>
+            modelBuilder.Entity<GenreEntity>(entity =>
             {
                 entity.ToTable("genre");
 
@@ -209,7 +209,7 @@ namespace UpcomingGames.Database
                     .HasColumnName("name");
             });
 
-            modelBuilder.Entity<Platform>(entity =>
+            modelBuilder.Entity<PlatformEntity>(entity =>
             {
                 entity.ToTable("platform");
 
@@ -221,7 +221,7 @@ namespace UpcomingGames.Database
                     .HasColumnName("name");
             });
 
-            modelBuilder.Entity<Theme>(entity =>
+            modelBuilder.Entity<ThemeEntity>(entity =>
             {
                 entity.ToTable("theme");
 
