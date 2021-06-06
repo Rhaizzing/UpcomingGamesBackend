@@ -50,6 +50,8 @@ namespace UpcomingGames.Database
                     .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("name");
+                
+                entity.Property(e => e.LogoUrl).HasColumnName("logo_url");
             });
 
             modelBuilder.Entity<GameEntity>(entity =>
