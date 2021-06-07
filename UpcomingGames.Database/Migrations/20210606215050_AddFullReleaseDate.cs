@@ -10,7 +10,7 @@ namespace UpcomingGames.Database.Migrations
             migrationBuilder.AddColumn<DateOnly>(
                 name: "full_release_date",
                 table: "game",
-                type: "date",
+                type: "jsonb",
                 nullable: true);
         }
 
