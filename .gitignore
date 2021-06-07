@@ -389,4 +389,5 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 
-
+# IGDB Token Store
+token.json
