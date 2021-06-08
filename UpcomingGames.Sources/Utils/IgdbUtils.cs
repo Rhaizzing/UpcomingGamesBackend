@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using IGDB;
 using IGDB.Models;
 using UpcomingGames.Database.Entities;
 using UpcomingGames.Database.Models;
@@ -28,16 +29,44 @@ namespace UpcomingGames.Sources.Utils
 			return true;
 		}
 
+		private static void AddDate(Dictionary<string, string> dictionary, string platform, string humanDate)
+		{
+			if (dictionary.ContainsKey(platform))
+			{
+				dictionary[platform] = humanDate;
+				return;
+			}
+			
+			dictionary.Add(platform, humanDate);
+		}
+
+		private static void AddFullDate(Dictionary<string, DateOnly> dictionary, string platform, DateTimeOffset unix)
+		{
+			var fullDate = DateOnly.FromDateTime(unix.Date);
+			
+			if (dictionary.ContainsKey(platform))
+			{
+				dictionary[platform] = fullDate;
+				return;
+			}
+			
+			dictionary.Add(platform, fullDate);
+		}
+		
 		public static GameEntity ConvertFromIgdb(this Game igdbGame)
 		{
 			var upcomingGame = new GameEntity();
 			var releaseDates = new ReleaseDates();
+			var fullReleaseDates = new FullReleaseDates();
 			var gameUrls = new GameUrls();
 
 			upcomingGame.Name = igdbGame.Name;
 
 			if (igdbGame.FirstReleaseDate.HasValue)
+			{
+				fullReleaseDates.FirstReleaseDate = DateOnly.FromDateTime(igdbGame.FirstReleaseDate.Value.Date);
 				releaseDates.FirstReleaseDate = igdbGame.FirstReleaseDate.ToString();
+			}
 
 			if (igdbGame.ReleaseDates?.Values is not null)
 			{
@@ -60,28 +89,44 @@ namespace UpcomingGames.Sources.Utils
 					switch (releaseDate.Region)
 					{
 						case ReleaseDateRegion.Worldwide:
-							releaseDates.Worldwide.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Worldwide,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.Worldwide, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.NorthAmerica:
-							releaseDates.NorthAmerica.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.NorthAmerica,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.NorthAmerica, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Europe:
-							releaseDates.Europe.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Europe,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.Europe, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Australia:
-							releaseDates.Australia.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Australia,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.Australia, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.NewZealand:
-							releaseDates.NewZealand.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.NewZealand,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.NewZealand, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Japan:
-							releaseDates.Japan.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Japan,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.Japan, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.China:
-							releaseDates.China.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.China,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.China, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Asia:
-							releaseDates.Asia.Add(releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Asia,releaseDate.Platform.Value.Name, releaseDateString);
+							if(releaseDate.Date is not null)
+								AddFullDate(fullReleaseDates.Asia, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException(nameof(releaseDate.Region));
@@ -90,9 +135,7 @@ namespace UpcomingGames.Sources.Utils
 			}
 
 			upcomingGame.ReleaseDate = JsonSerializer.Serialize(releaseDates);
-			
-			if(igdbGame.FirstReleaseDate is not null)
-				upcomingGame.FullReleaseDate = DateOnly.FromDateTime(igdbGame.FirstReleaseDate.Value.Date);
+			upcomingGame.FullReleaseDate = JsonSerializer.Serialize(fullReleaseDates);
 
 			if (igdbGame.Cover?.Value is not null)
 				upcomingGame.CoverUrl = igdbGame.Cover.Value.Url;
