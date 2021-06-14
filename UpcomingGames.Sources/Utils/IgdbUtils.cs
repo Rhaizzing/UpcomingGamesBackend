@@ -138,7 +138,7 @@ namespace UpcomingGames.Sources.Utils
 			upcomingGame.FullReleaseDate = JsonSerializer.Serialize(fullReleaseDates);
 
 			if (igdbGame.Cover?.Value is not null)
-				upcomingGame.CoverUrl = igdbGame.Cover.Value.Url;
+				upcomingGame.CoverUrl = $"https:{ImageHelper.GetImageUrl(igdbGame.Cover.Value.ImageId, ImageSize.CoverBig, true)}";
 
 			if (igdbGame.AggregatedRating is not null)
 				upcomingGame.Score = igdbGame.AggregatedRating;
