@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IGDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using UpcomingGames.API.Repositories;
+using UpcomingGames.API.Services;
+using UpcomingGames.Database;
+using UpcomingGames.Sources.Implementations;
+using UpcomingGames.Sources.Utils;
 
 namespace UpcomingGames.API
 {
@@ -26,6 +32,17 @@ namespace UpcomingGames.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<postgresContext>();
+            
+            services.AddSingleton(c => new IGDBClient(
+                // Found in Twitch Developer portal for your app
+                Environment.GetEnvironmentVariable("TWITCH_CLIENT_TOKEN"),
+                Environment.GetEnvironmentVariable("TWITCH_CLIENT_SECRET"),
+                new JsonTokenStore("token.json")
+            ));
+            services.AddSingleton<IgdbSource>();
+
+            services.AddTransient<GameRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -44,7 +61,7 @@ namespace UpcomingGames.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UpcomingGames.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
