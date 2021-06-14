@@ -16,7 +16,7 @@ namespace UpcomingGames.Sources.Implementations
 		private readonly IGDBClient _client;
 
 		private const string FIELDS =
-			"id, name, release_dates.*, release_dates.platform.name, cover.url, age_ratings.*, aggregated_rating, url, websites.*, genres.name, themes.name, involved_companies.company.name, involved_companies.company.logo.url";
+			"fields id, name, release_dates.*, release_dates.platform.name, cover.image_id, age_ratings.*, aggregated_rating, url, websites.*, genres.name, themes.name, involved_companies.company.name, involved_companies.company.logo.url";
 
 		public IgdbSource(IGDBClient client)
 		{
@@ -51,9 +51,9 @@ namespace UpcomingGames.Sources.Implementations
 		public async Task<IEnumerable<FullGameDto>> GetAll(int page, int itemsPerPage)
 		{
 			var query =
-				$"sort first_release_date asc; where status != {(int)GameStatus.Released} & status != {(int)GameStatus.Offline} & status != {(int)GameStatus.Cancelled} & first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()}";
+				$"sort first_release_date asc; where status != 0 & status != 5 & status != 6 & first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()}";
 			
-			const string pagination = "offset {(page - 1) * itemsPerPage}; limit {itemsPerPage}";
+			var pagination = $"offset {(page - 1) * itemsPerPage}; limit {itemsPerPage}";
 			
 			var igdbGames = await _client.QueryAsync<Game>(IGDBClient.Endpoints.Games, $"{FIELDS}; {query}; {pagination};");
 
