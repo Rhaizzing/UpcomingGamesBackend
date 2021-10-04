@@ -5,8 +5,8 @@ using System.Text.Json;
 using IGDB;
 using IGDB.Models;
 using UpcomingGames.API.Utils;
-using UpcomingGames.Database.Entities;
-using UpcomingGames.Database.Models;
+using UpcomingGamesBackend.Model.Contracts;
+using UpcomingGamesBackend.Model.Entities;
 
 namespace UpcomingGames.Sources.Utils
 {
@@ -71,10 +71,9 @@ namespace UpcomingGames.Sources.Utils
 
 			if (igdbGame.ReleaseDates?.Values is not null)
 			{
-				string releaseDateString;
 				foreach (var releaseDate in igdbGame.ReleaseDates.Values)
 				{
-					releaseDateString = releaseDate.Category switch
+					var releaseDateString = releaseDate.Category switch
 					{
 						ReleaseDateCategory.YYYYMMMMDD => releaseDate.Date.ToString(),
 						ReleaseDateCategory.YYYYMMMM => $"{releaseDate.Month}/{releaseDate.Year}",
@@ -90,42 +89,42 @@ namespace UpcomingGames.Sources.Utils
 					switch (releaseDate.Region)
 					{
 						case ReleaseDateRegion.Worldwide:
-							AddDate(releaseDates.Worldwide,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Worldwide,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.Worldwide, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.NorthAmerica:
-							AddDate(releaseDates.NorthAmerica,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.NorthAmerica,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.NorthAmerica, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Europe:
-							AddDate(releaseDates.Europe,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Europe,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.Europe, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Australia:
-							AddDate(releaseDates.Australia,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Australia,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.Australia, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.NewZealand:
-							AddDate(releaseDates.NewZealand,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.NewZealand,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.NewZealand, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Japan:
-							AddDate(releaseDates.Japan,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Japan,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.Japan, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.China:
-							AddDate(releaseDates.China,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.China,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.China, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Asia:
-							AddDate(releaseDates.Asia,releaseDate.Platform.Value.Name, releaseDateString);
+							AddDate(releaseDates.Asia,releaseDate.Platform.Value.Name, releaseDateString!);
 							if(releaseDate.Date is not null)
 								AddFullDate(fullReleaseDates.Asia, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
 							break;
@@ -235,7 +234,7 @@ namespace UpcomingGames.Sources.Utils
 			return upcomingGame;
 		}
 
-		public static IEnumerable<PlatformEntity> GetPlatforms(this Game igdbGame)
+		public static IEnumerable<PlatformEntity>? GetPlatforms(this Game igdbGame)
 		{
 			return igdbGame.Platforms?.Values?.Select(platform =>
 				new PlatformEntity
@@ -245,7 +244,7 @@ namespace UpcomingGames.Sources.Utils
 			);
 		}
 		
-		public static IEnumerable<GenreEntity> GetGenres(this Game igdbGame)
+		public static IEnumerable<GenreEntity>? GetGenres(this Game igdbGame)
 		{
 			return igdbGame.Genres?.Values?.Select(genre =>
 				new GenreEntity
@@ -255,7 +254,7 @@ namespace UpcomingGames.Sources.Utils
 			);
 		}
 		
-		public static IEnumerable<ThemeEntity> GetThemes(this Game igdbGame)
+		public static IEnumerable<ThemeEntity>? GetThemes(this Game igdbGame)
 		{
 			return igdbGame.Themes?.Values?.Select(theme =>
 				new ThemeEntity
@@ -265,7 +264,7 @@ namespace UpcomingGames.Sources.Utils
 			);
 		}
 		
-		public static IEnumerable<CompanyEntity> GetCompanies(this Game igdbGame)
+		public static IEnumerable<CompanyEntity>? GetCompanies(this Game igdbGame)
 		{
 			return igdbGame.InvolvedCompanies?.Values?.Select(company =>
 				new CompanyEntity

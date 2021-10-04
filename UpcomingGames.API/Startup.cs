@@ -18,6 +18,7 @@ using UpcomingGames.API.Utils;
 using UpcomingGames.Database;
 using UpcomingGames.Sources.Implementations;
 using UpcomingGames.Sources.Utils;
+using UpcomingGamesBackend.Model.Interfaces;
 
 namespace UpcomingGames.API
 {
@@ -30,7 +31,6 @@ namespace UpcomingGames.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -52,13 +52,14 @@ namespace UpcomingGames.API
             ));
             services.AddSingleton<IgdbSource>();
 
-            services.AddTransient<GameRepository>();
+            services.AddTransient<IGameRepository, GameRepository>();
 
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
-                });;
+                });
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UpcomingGames.API", Version = "v1" });
@@ -74,12 +75,9 @@ namespace UpcomingGames.API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UpcomingGames.API v1"));
             }
-
-            //app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
-            //app.UseAuthorization();
             app.UseCors("cors");
             
             app.UseEndpoints(endpoints =>

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using IGDB;
 using IGDB.Models;
-using UpcomingGames.Database.DTO;
-using UpcomingGames.Database.Entities;
 using UpcomingGames.Sources.Interfaces;
 using UpcomingGames.Sources.Utils;
+using UpcomingGamesBackend.Model.DTO;
 
 namespace UpcomingGames.Sources.Implementations
 {
@@ -34,7 +33,7 @@ namespace UpcomingGames.Sources.Implementations
 				igdbGame.GetThemes(), igdbGame.GetCompanies());
 		}
 
-		public async Task<IEnumerable<FullGameDto>> Search(string searchQuery)
+		public async Task<IEnumerable<FullGameDto?>> Search(string searchQuery)
 		{
 			var igdbGames = await _client.QueryAsync<Game>(IGDBClient.Endpoints.Games, $@"search ""{searchQuery}""; {FIELDS};");
 
