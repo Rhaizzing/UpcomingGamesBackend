@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace UpcomingGames.Database.Models
+namespace UpcomingGamesBackend.Model.Contracts
 {
 	public class ReleaseDates
 	{

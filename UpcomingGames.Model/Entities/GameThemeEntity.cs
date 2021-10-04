@@ -1,6 +1,6 @@
 ﻿#nullable disable
 
-namespace UpcomingGames.Database.Entities
+namespace UpcomingGamesBackend.Model.Entities
 {
     public partial class GameThemeEntity
     {

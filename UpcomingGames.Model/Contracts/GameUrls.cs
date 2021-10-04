@@ -1,4 +1,4 @@
-namespace UpcomingGames.Database.Models
+namespace UpcomingGamesBackend.Model.Contracts
 {
 	public class GameUrls
 	{

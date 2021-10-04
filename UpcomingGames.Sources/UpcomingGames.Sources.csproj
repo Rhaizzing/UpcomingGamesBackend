@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -9,8 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UpcomingGames.Database\UpcomingGames.Database.csproj" />
+    <ProjectReference Include="..\UpcomingGames.Data\UpcomingGames.Data.csproj" />
     <ProjectReference Include="..\UpcomingGames.Utils\UpcomingGames.Utils.csproj" />
+    <ProjectReference Include="..\UpcomingGames.Model\UpcomingGames.Model.csproj" />
   </ItemGroup>
 
 </Project>

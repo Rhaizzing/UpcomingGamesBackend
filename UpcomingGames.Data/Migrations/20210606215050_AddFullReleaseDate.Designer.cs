@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UpcomingGames.Database;
 
 namespace UpcomingGames.Database.Migrations
 {
     [DbContext(typeof(postgresContext))]
-    partial class postgresContextModelSnapshot : ModelSnapshot
+    [Migration("20210606215050_AddFullReleaseDate")]
+    partial class AddFullReleaseDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,7 +22,7 @@ namespace UpcomingGames.Database.Migrations
                 .HasAnnotation("ProductVersion", "6.0.0-preview.4.21253.1")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.CompanyEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.CompanyEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,13 +42,10 @@ namespace UpcomingGames.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("company");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameCompanyEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameCompanyEntity", b =>
                 {
                     b.Property<int>("CompanyId")
                         .HasColumnType("integer")
@@ -69,7 +68,7 @@ namespace UpcomingGames.Database.Migrations
                     b.ToTable("game_company");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,20 +123,10 @@ namespace UpcomingGames.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FullReleaseDate");
-
-                    b.HasIndex("IgdbId");
-
-                    b.HasIndex("IsReleased");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ReleaseDate");
-
                     b.ToTable("game");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameGenreEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameGenreEntity", b =>
                 {
                     b.Property<int>("GameId")
                         .HasColumnType("integer")
@@ -160,7 +149,7 @@ namespace UpcomingGames.Database.Migrations
                     b.ToTable("game_genre");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GamePlatformEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GamePlatformEntity", b =>
                 {
                     b.Property<int>("GameId")
                         .HasColumnType("integer")
@@ -183,7 +172,7 @@ namespace UpcomingGames.Database.Migrations
                     b.ToTable("game_platform");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameThemeEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameThemeEntity", b =>
                 {
                     b.Property<int>("GameId")
                         .HasColumnType("integer")
@@ -206,7 +195,7 @@ namespace UpcomingGames.Database.Migrations
                     b.ToTable("game_theme");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GenreEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GenreEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,14 +210,11 @@ namespace UpcomingGames.Database.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("genre");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.PlatformEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.PlatformEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,14 +229,11 @@ namespace UpcomingGames.Database.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("platform");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.ThemeEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.ThemeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,21 +249,18 @@ namespace UpcomingGames.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("theme");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameCompanyEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameCompanyEntity", b =>
                 {
-                    b.HasOne("UpcomingGames.Database.Entities.CompanyEntity", "CompanyEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.CompanyEntity", "CompanyEntity")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .HasConstraintName("game_company_fk_1")
                         .IsRequired();
 
-                    b.HasOne("UpcomingGames.Database.Entities.GameEntity", "GameEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.GameEntity", "GameEntity")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .HasConstraintName("game_company_fk")
@@ -291,15 +271,15 @@ namespace UpcomingGames.Database.Migrations
                     b.Navigation("GameEntity");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameGenreEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameGenreEntity", b =>
                 {
-                    b.HasOne("UpcomingGames.Database.Entities.GameEntity", "GameEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.GameEntity", "GameEntity")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .HasConstraintName("game_genre_fk")
                         .IsRequired();
 
-                    b.HasOne("UpcomingGames.Database.Entities.GenreEntity", "GenreEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.GenreEntity", "GenreEntity")
                         .WithMany()
                         .HasForeignKey("GenreId")
                         .HasConstraintName("game_genre_fk_1")
@@ -310,15 +290,15 @@ namespace UpcomingGames.Database.Migrations
                     b.Navigation("GenreEntity");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GamePlatformEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GamePlatformEntity", b =>
                 {
-                    b.HasOne("UpcomingGames.Database.Entities.GameEntity", "GameEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.GameEntity", "GameEntity")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .HasConstraintName("game_platform_fk")
                         .IsRequired();
 
-                    b.HasOne("UpcomingGames.Database.Entities.PlatformEntity", "PlatformEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.PlatformEntity", "PlatformEntity")
                         .WithMany()
                         .HasForeignKey("PlatformId")
                         .HasConstraintName("game_platform_fk_1")
@@ -329,15 +309,15 @@ namespace UpcomingGames.Database.Migrations
                     b.Navigation("PlatformEntity");
                 });
 
-            modelBuilder.Entity("UpcomingGames.Database.Entities.GameThemeEntity", b =>
+            modelBuilder.Entity("UpcomingGames.Data.Entities.GameThemeEntity", b =>
                 {
-                    b.HasOne("UpcomingGames.Database.Entities.GameEntity", "GameEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.GameEntity", "GameEntity")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .HasConstraintName("game_theme_fk")
                         .IsRequired();
 
-                    b.HasOne("UpcomingGames.Database.Entities.ThemeEntity", "ThemeEntity")
+                    b.HasOne("UpcomingGames.Data.Entities.ThemeEntity", "ThemeEntity")
                         .WithMany()
                         .HasForeignKey("ThemeId")
                         .HasConstraintName("game_theme_fk_1")
