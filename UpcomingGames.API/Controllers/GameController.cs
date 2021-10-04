@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UpcomingGames.API.Repositories;
+using UpcomingGames.API.Utils;
 using UpcomingGames.Database.Models;
 
 namespace UpcomingGames.API.Controllers
@@ -13,6 +15,16 @@ namespace UpcomingGames.API.Controllers
 	public class GameController : ControllerBase
 	{
 		private readonly GameRepository _repository;
+		
+		JsonSerializerOptions _serializeOptions = new()
+		{
+			WriteIndented = true,
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+			Converters =
+			{
+				new DateOnlyJsonConverter()
+			}
+		};
 
 		public GameController(GameRepository repository)
 		{
@@ -42,8 +54,8 @@ namespace UpcomingGames.API.Controllers
 			return Ok(new DisplayGame(
 				game.Id,
 				game.Name,
-				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate),
-				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate),
+				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate, _serializeOptions),
+				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate, _serializeOptions),
 				game.CoverUrl,
 				game.Score,
 				game.EsrbRating,
@@ -65,8 +77,8 @@ namespace UpcomingGames.API.Controllers
 			return Ok(games.Select(game => new DisplayGame(
 				game.Id,
 				game.Name,
-				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate),
-				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate),
+				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate, _serializeOptions),
+				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate, _serializeOptions),
 				game.CoverUrl,
 				game.Score,
 				game.EsrbRating,
@@ -88,8 +100,8 @@ namespace UpcomingGames.API.Controllers
 			return Ok(games.Select(game => new DisplayGame(
 				game.Id,
 				game.Name,
-				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate),
-				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate),
+				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate, _serializeOptions),
+				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate, _serializeOptions),
 				game.CoverUrl,
 				game.Score,
 				game.EsrbRating,

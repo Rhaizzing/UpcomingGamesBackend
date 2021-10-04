@@ -11,7 +11,7 @@ namespace UpcomingGames.API.Controllers
 	[Route("api/v1/master")]
 	public class MasterController : ControllerBase
 	{
-		private SyncDatabase<IgdbSource, long> _igdbSource;
+		private readonly SyncDatabase<IgdbSource, long> _igdbSource;
 
 		public MasterController(GameRepository repository, IGDBClient igdbClient)
 		{

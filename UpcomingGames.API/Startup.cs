@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using UpcomingGames.API.Repositories;
 using UpcomingGames.API.Services;
+using UpcomingGames.API.Utils;
 using UpcomingGames.Database;
 using UpcomingGames.Sources.Implementations;
 using UpcomingGames.Sources.Utils;
@@ -32,6 +33,15 @@ namespace UpcomingGames.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "cors",
+                    builder =>
+                    {
+                        builder.WithOrigins("*");
+                    });
+            });
+            
             services.AddDbContext<postgresContext>();
             
             services.AddSingleton(c => new IGDBClient(
@@ -44,7 +54,11 @@ namespace UpcomingGames.API
 
             services.AddTransient<GameRepository>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+                });;
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UpcomingGames.API", Version = "v1" });
@@ -65,8 +79,9 @@ namespace UpcomingGames.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
+            //app.UseAuthorization();
+            app.UseCors("cors");
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

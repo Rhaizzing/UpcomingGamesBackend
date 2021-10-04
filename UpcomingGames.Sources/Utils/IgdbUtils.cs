@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using IGDB;
 using IGDB.Models;
+using UpcomingGames.API.Utils;
 using UpcomingGames.Database.Entities;
 using UpcomingGames.Database.Models;
 
@@ -133,9 +134,18 @@ namespace UpcomingGames.Sources.Utils
 					}
 				}
 			}
+			
+			var serializeOptions = new JsonSerializerOptions
+			{
+				WriteIndented = true,
+				Converters =
+				{
+					new DateOnlyJsonConverter()
+				}
+			};
 
-			upcomingGame.ReleaseDate = JsonSerializer.Serialize(releaseDates);
-			upcomingGame.FullReleaseDate = JsonSerializer.Serialize(fullReleaseDates);
+			upcomingGame.ReleaseDate = JsonSerializer.Serialize(releaseDates, serializeOptions);
+			upcomingGame.FullReleaseDate = JsonSerializer.Serialize(fullReleaseDates, serializeOptions);
 
 			if (igdbGame.Cover?.Value is not null)
 				upcomingGame.CoverUrl = $"https:{ImageHelper.GetImageUrl(igdbGame.Cover.Value.ImageId, ImageSize.CoverBig, true)}";
