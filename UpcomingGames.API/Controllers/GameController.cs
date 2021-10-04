@@ -67,9 +67,9 @@ namespace UpcomingGames.API.Controllers
 		} 
 		
 		[HttpGet]
-		public async Task<IActionResult> GetAllGames()
+		public async Task<IActionResult> GetAllGames(int page, int pageSize)
 		{
-			var games = await _repository.GetAll();
+			var games = await _repository.GetAll(page, pageSize);
 
 			if (!games.Any())
 				return NotFound();

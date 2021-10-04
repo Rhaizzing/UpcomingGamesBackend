@@ -22,9 +22,10 @@ namespace UpcomingGames.API.Repositories
 			return _dbContext.Games.FindAsync(id);
 		}
 
-		public Task<List<GameEntity>> GetAll()
+		public Task<List<GameEntity>> GetAll(int page, int pageSize)
 		{
-			return _dbContext.Games.ToListAsync();
+			return _dbContext.Games.Skip((page - 1) * pageSize)
+				.Take(pageSize).ToListAsync();
 		}
 
 		public Task<List<GameEntity>> SearchByName(string name)
