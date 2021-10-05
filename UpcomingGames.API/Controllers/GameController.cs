@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UpcomingGames.API.Repositories;
-using UpcomingGames.Database.Models;
+using UpcomingGames.API.Utils;
+using UpcomingGamesBackend.Model.Contracts;
+using UpcomingGamesBackend.Model.DTO;
 
 namespace UpcomingGames.API.Controllers
 {
@@ -14,21 +17,31 @@ namespace UpcomingGames.API.Controllers
 	{
 		private readonly GameRepository _repository;
 
+		readonly JsonSerializerOptions _serializeOptions = new()
+		{
+			WriteIndented = true,
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+			Converters =
+			{
+				new DateOnlyJsonConverter()
+			}
+		};
+
 		public GameController(GameRepository repository)
 		{
 			_repository = repository;
 		}
 
-		public record DisplayGame(int Id,
+		private record DisplayGame(int Id,
 			string Name,
-			ReleaseDates ReleaseDate,
-			FullReleaseDates FullReleaseDate,
+			ReleaseDates? ReleaseDate,
+			FullReleaseDates? FullReleaseDate,
 			string CoverUrl,
 			double? Score,
 			string EsrbRating,
 			string PegiRating,
 			bool IsReleased,
-			GameUrls Urls,
+			GameUrls? Urls,
 			long IgdbId);
 
 		[HttpGet("{id:int}")]
@@ -42,8 +55,8 @@ namespace UpcomingGames.API.Controllers
 			return Ok(new DisplayGame(
 				game.Id,
 				game.Name,
-				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate),
-				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate),
+				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate, _serializeOptions),
+				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate, _serializeOptions),
 				game.CoverUrl,
 				game.Score,
 				game.EsrbRating,
@@ -55,26 +68,34 @@ namespace UpcomingGames.API.Controllers
 		} 
 		
 		[HttpGet]
-		public async Task<IActionResult> GetAllGames()
+		public async Task<IActionResult> GetAllGames(int page, int pageSize)
 		{
-			var games = await _repository.GetAll();
+			var totalGames = await _repository.GetAllItemsCount();
+			var games = await _repository.GetAll(page, pageSize);
 
 			if (!games.Any())
 				return NotFound();
 
-			return Ok(games.Select(game => new DisplayGame(
-				game.Id,
-				game.Name,
-				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate),
-				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate),
-				game.CoverUrl,
-				game.Score,
-				game.EsrbRating,
-				game.PegiRating,
-				game.IsReleased,
-				JsonSerializer.Deserialize<GameUrls>(game.Urls),
-				game.IgdbId
-			)));
+			return Ok(new PaginatedResource<IEnumerable<DisplayGame>>
+			{
+				Page = page,
+				PageSize = pageSize,
+				TotalPages = totalGames / pageSize,
+				TotalItems = totalGames,
+				Data = games.Select(game => new DisplayGame(
+					game.Id,
+					game.Name,
+					JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate, _serializeOptions),
+					JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate, _serializeOptions),
+					game.CoverUrl,
+					game.Score,
+					game.EsrbRating,
+					game.PegiRating,
+					game.IsReleased,
+					JsonSerializer.Deserialize<GameUrls>(game.Urls),
+					game.IgdbId
+				))
+			});
 		} 
 		
 		[HttpGet("search/{query}")]
@@ -88,8 +109,8 @@ namespace UpcomingGames.API.Controllers
 			return Ok(games.Select(game => new DisplayGame(
 				game.Id,
 				game.Name,
-				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate),
-				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate),
+				JsonSerializer.Deserialize<ReleaseDates>(game.ReleaseDate, _serializeOptions),
+				JsonSerializer.Deserialize<FullReleaseDates>(game.FullReleaseDate, _serializeOptions),
 				game.CoverUrl,
 				game.Score,
 				game.EsrbRating,

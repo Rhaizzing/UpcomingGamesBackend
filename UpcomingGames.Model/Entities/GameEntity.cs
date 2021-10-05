@@ -1,8 +1,6 @@
-﻿using System;
+﻿#nullable disable
 
-#nullable disable
-
-namespace UpcomingGames.Database.Entities
+namespace UpcomingGamesBackend.Model.Entities
 {
     public partial class GameEntity
     {

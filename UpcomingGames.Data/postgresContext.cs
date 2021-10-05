@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using UpcomingGames.Database.Entities;
+using UpcomingGamesBackend.Model.Entities;
 
 #nullable disable
 

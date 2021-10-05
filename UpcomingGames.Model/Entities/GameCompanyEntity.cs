@@ -1,15 +1,15 @@
 ﻿#nullable disable
 
-namespace UpcomingGames.Database.Entities
+namespace UpcomingGamesBackend.Model.Entities
 {
     public partial class 
-        GameGenreEntity
+        GameCompanyEntity
     {
         public int Id { get; set; }
         public int GameId { get; set; }
-        public int GenreId { get; set; }
+        public int CompanyId { get; set; }
 
+        public virtual CompanyEntity CompanyEntity { get; set; }
         public virtual GameEntity GameEntity { get; set; }
-        public virtual GenreEntity GenreEntity { get; set; }
     }
 }
