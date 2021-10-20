@@ -86,50 +86,53 @@ namespace UpcomingGames.Sources.Utils
 						_ => "NA"
 					};
 
+					var platform = releaseDate.Platform.Value.Name == "PC (Microsoft Windows)" ? "PC" : releaseDate.Platform.Value.Name;
+
 					switch (releaseDate.Region)
 					{
 						case ReleaseDateRegion.Worldwide:
-							AddDate(releaseDates.Worldwide,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.Worldwide,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.Worldwide, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.Worldwide, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.NorthAmerica:
-							AddDate(releaseDates.NorthAmerica,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.NorthAmerica,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.NorthAmerica, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.NorthAmerica, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Europe:
-							AddDate(releaseDates.Europe,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.Europe,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.Europe, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.Europe, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Australia:
-							AddDate(releaseDates.Australia,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.Australia,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.Australia, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.Australia, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.NewZealand:
-							AddDate(releaseDates.NewZealand,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.NewZealand,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.NewZealand, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.NewZealand, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Japan:
-							AddDate(releaseDates.Japan,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.Japan,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.Japan, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.Japan, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.China:
-							AddDate(releaseDates.China,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.China,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.China, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.China, platform, releaseDate.Date.Value);
 							break;
 						case ReleaseDateRegion.Asia:
-							AddDate(releaseDates.Asia,releaseDate.Platform.Value.Name, releaseDateString!);
+							AddDate(releaseDates.Asia,platform, releaseDateString!);
 							if(releaseDate.Date is not null)
-								AddFullDate(fullReleaseDates.Asia, releaseDate.Platform.Value.Name, releaseDate.Date.Value);
+								AddFullDate(fullReleaseDates.Asia, platform, releaseDate.Date.Value);
 							break;
 						default:
-							throw new ArgumentOutOfRangeException(nameof(releaseDate.Region));
+							//throw new ArgumentOutOfRangeException(nameof(releaseDate.Region), releaseDate.Region, "The region was not expected.");
+							break;
 					}
 				}
 			}
@@ -163,7 +166,8 @@ namespace UpcomingGames.Sources.Utils
 							upcomingGame.PegiRating = ageRating.Rating.ToString();
 							break;
 						default:
-							throw new ArgumentOutOfRangeException(nameof(ageRating.Category));
+							//throw new ArgumentOutOfRangeException(nameof(ageRating.Category), ageRating.Category, "Did not expect this category");
+							break;
 					}
 
 			if (igdbGame.Websites?.Values is not null)
@@ -239,7 +243,7 @@ namespace UpcomingGames.Sources.Utils
 			return igdbGame.Platforms?.Values?.Select(platform =>
 				new PlatformEntity
 				{
-					Name = platform.Name
+					Name = platform.Name == "PC (Microsoft Windows)" ? "PC" : platform.Name
 				}
 			);
 		}
