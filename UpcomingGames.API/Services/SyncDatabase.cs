@@ -2,15 +2,16 @@ using System;
 using System.Threading.Tasks;
 using UpcomingGames.API.Repositories;
 using UpcomingGames.Sources.Interfaces;
+using UpcomingGamesBackend.Model.Interfaces;
 
 namespace UpcomingGames.API.Services
 {
 	public class SyncDatabase<T, I> where  T : IGameSource<I>
 	{
-		private readonly GameRepository _repository;
+		private readonly IGameRepository _repository;
 		private readonly T _gameSource;
 
-		public SyncDatabase(GameRepository repository, T source)
+		public SyncDatabase(IGameRepository repository, T source)
 		{
 			_repository = repository;
 			_gameSource = source;

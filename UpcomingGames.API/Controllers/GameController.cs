@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -8,6 +9,7 @@ using UpcomingGames.API.Repositories;
 using UpcomingGames.API.Utils;
 using UpcomingGamesBackend.Model.Contracts;
 using UpcomingGamesBackend.Model.DTO;
+using UpcomingGamesBackend.Model.Interfaces;
 
 namespace UpcomingGames.API.Controllers
 {
@@ -15,7 +17,7 @@ namespace UpcomingGames.API.Controllers
 	[Route("api/v1/game")]
 	public class GameController : ControllerBase
 	{
-		private readonly GameRepository _repository;
+		private readonly IGameRepository _repository;
 
 		readonly JsonSerializerOptions _serializeOptions = new()
 		{
@@ -27,7 +29,7 @@ namespace UpcomingGames.API.Controllers
 			}
 		};
 
-		public GameController(GameRepository repository)
+		public GameController(IGameRepository repository)
 		{
 			_repository = repository;
 		}
@@ -80,7 +82,7 @@ namespace UpcomingGames.API.Controllers
 			{
 				Page = page,
 				PageSize = pageSize,
-				TotalPages = totalGames / pageSize,
+				TotalPages = (int) Math.Ceiling( totalGames / (double) pageSize),
 				TotalItems = totalGames,
 				Data = games.Select(game => new DisplayGame(
 					game.Id,

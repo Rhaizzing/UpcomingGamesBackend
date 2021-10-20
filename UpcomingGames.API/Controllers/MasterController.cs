@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UpcomingGames.API.Repositories;
 using UpcomingGames.API.Services;
 using UpcomingGames.Sources.Implementations;
+using UpcomingGamesBackend.Model.Interfaces;
 
 namespace UpcomingGames.API.Controllers
 {
@@ -13,7 +14,7 @@ namespace UpcomingGames.API.Controllers
 	{
 		private readonly SyncDatabase<IgdbSource, long> _igdbSource;
 
-		public MasterController(GameRepository repository, IGDBClient igdbClient)
+		public MasterController(IGameRepository repository, IGDBClient igdbClient)
 		{
 			_igdbSource = new SyncDatabase<IgdbSource, long>(repository, new IgdbSource(igdbClient));
 		}

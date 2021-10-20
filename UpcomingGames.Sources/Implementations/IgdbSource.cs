@@ -47,7 +47,7 @@ namespace UpcomingGames.Sources.Implementations
 			});
 		}
 
-		public async Task<IEnumerable<FullGameDto>> GetAll(int page, int itemsPerPage)
+		public async Task<IEnumerable<FullGameDto?>> GetAll(int page, int itemsPerPage)
 		{
 			var query =
 				$"sort first_release_date asc; where status != 0 & status != 5 & status != 6 & first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()}";
