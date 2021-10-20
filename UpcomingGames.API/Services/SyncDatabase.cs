@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UpcomingGames.API.Repositories;
 using UpcomingGames.Sources.Interfaces;
+using UpcomingGamesBackend.Model.DTO;
 using UpcomingGamesBackend.Model.Interfaces;
 
 namespace UpcomingGames.API.Services
@@ -19,12 +22,19 @@ namespace UpcomingGames.API.Services
 
 		public async Task<int> SyncGameDatabase()
 		{
-			var games = await _gameSource.GetAll(1, 500);
+			var gamesCount = await _gameSource.GetGamesCount();
 
-			foreach (var game in games)
-				await _repository.Add(game.Game);
+			if (gamesCount == 0)
+				return 0;
+
+			List<FullGameDto?> games = new();
 			
+			for(var i = 1; i <= (int)Math.Ceiling(gamesCount / 500.0); i++)
+				games.AddRange(await _gameSource.GetAll(i, 500));
 
+			foreach (var game in games.Where(entry => entry is not null))
+				await _repository.Add(game!.Game);
+			
 			return _repository.SaveChanges();
 		}
 

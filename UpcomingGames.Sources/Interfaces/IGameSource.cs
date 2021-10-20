@@ -9,5 +9,6 @@ namespace UpcomingGames.Sources.Interfaces
 		Task<FullGameDto?> GetOne(T gameQuery);
 		Task<IEnumerable<FullGameDto?>> Search(string searchQuery);
 		Task<IEnumerable<FullGameDto?>> GetAll(int page, int itemsPerPage);
+		Task<int> GetGamesCount();
 	}
 }

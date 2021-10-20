@@ -65,5 +65,14 @@ namespace UpcomingGames.Sources.Implementations
 					igdbGame.GetThemes(), igdbGame.GetCompanies());
 			});
 		}
+		
+		public async Task<int> GetGamesCount()
+		{
+			var query = $"where ((status != 0 & status != 5 & status != 6) | status = null) & (release_dates.date >= {DateTimeOffset.Now.ToUnixTimeSeconds()} | first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()});";
+
+			var totalGames = (await _client.CountAsync(IGDBClient.Endpoints.Games, query));
+
+			return totalGames?.Count ?? 0;
+		}
 	}
 }
