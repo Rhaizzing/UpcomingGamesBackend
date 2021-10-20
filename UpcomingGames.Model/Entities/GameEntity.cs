@@ -1,4 +1,6 @@
-﻿#nullable disable
+﻿using NpgsqlTypes;
+
+#nullable disable
 
 namespace UpcomingGamesBackend.Model.Entities
 {
@@ -15,5 +17,7 @@ namespace UpcomingGamesBackend.Model.Entities
         public bool IsReleased { get; set; }
         public string Urls { get; set; }
         public long IgdbId { get; set; }
+        
+        public NpgsqlTsVector SearchVector { get; set; }
     }
 }

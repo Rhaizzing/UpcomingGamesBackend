@@ -22,9 +22,11 @@ namespace UpcomingGames.Sources.Implementations
 			_client = client;
 		}
 
-		public async Task<FullGameDto> GetOne(long igdbGameId)
+		public async Task<FullGameDto?> GetOne(long igdbGameId)
 		{
-			var igdbGame = (await _client.QueryAsync<Game>(IGDBClient.Endpoints.Games, $"{FIELDS}; where id = {igdbGameId};"))[0];
+			var igdbGames = (await _client.QueryAsync<Game>(IGDBClient.Endpoints.Games, $"{FIELDS}; where id = {igdbGameId};"));
+
+			var igdbGame = igdbGames[0];
 
 			if (igdbGame.ReleaseDates?.Values?.IsGameFullyReleased() ?? false)
 				return null;
@@ -50,7 +52,7 @@ namespace UpcomingGames.Sources.Implementations
 		public async Task<IEnumerable<FullGameDto?>> GetAll(int page, int itemsPerPage)
 		{
 			var query =
-				$"sort first_release_date asc; where status != 0 & status != 5 & status != 6 & first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()}";
+				$"sort release_dates.date asc; where ((status != 0 & status != 5 & status != 6) | status = null) & (release_dates.date >= {DateTimeOffset.Now.ToUnixTimeSeconds()} | first_release_date >= {DateTimeOffset.Now.ToUnixTimeSeconds()})";
 			
 			var pagination = $"offset {(page - 1) * itemsPerPage}; limit {itemsPerPage}";
 			

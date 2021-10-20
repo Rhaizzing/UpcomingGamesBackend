@@ -39,7 +39,7 @@ namespace UpcomingGames.API.Repositories
 
 		public Task<List<GameEntity>> SearchByName(string name)
 		{
-			return _dbContext.Games.Where(game => game.Name.ToLower().Contains(name.ToLower())).ToListAsync();
+			return _dbContext.Games.Where(p => p.SearchVector.Matches(_dbContext.Unaccent(name))).ToListAsync();
 		}
 
 		public ValueTask<EntityEntry<GameEntity>> Add(GameEntity game)

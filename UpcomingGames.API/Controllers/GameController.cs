@@ -101,7 +101,7 @@ namespace UpcomingGames.API.Controllers
 		} 
 		
 		[HttpGet("search/{query}")]
-		public async Task<IActionResult> GetAllGames(string query)
+		public async Task<IActionResult> SearchGameByName(string query)
 		{
 			var games = await _repository.SearchByName(query);
 

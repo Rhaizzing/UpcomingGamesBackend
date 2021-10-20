@@ -40,6 +40,8 @@ namespace UpcomingGames.Database
         {
             modelBuilder.HasAnnotation("Relational:Collation", "en_US.utf8");
 
+            modelBuilder.HasPostgresExtension("unaccent");
+
             modelBuilder.Entity<CompanyEntity>(entity =>
             {
                 entity.ToTable("company");
@@ -101,6 +103,13 @@ namespace UpcomingGames.Database
                 entity.HasIndex(e => e.IsReleased);
                 entity.HasIndex(e => e.ReleaseDate);
                 entity.HasIndex(e => e.FullReleaseDate);
+                
+                entity.HasGeneratedTsVectorColumn(
+                        p => p.SearchVector,
+                        "english",  // Text search config
+                        p => p.Name)  // Included properties
+                    .HasIndex(p => p.SearchVector)
+                    .HasMethod("GIN");
 
             });
 
@@ -258,5 +267,11 @@ namespace UpcomingGames.Database
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        
+        [DbFunction("unaccent")]
+        public string Unaccent(string text)
+        {
+            throw new NotSupportedException();
+        }
     }
 }
