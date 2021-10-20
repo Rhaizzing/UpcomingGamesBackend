@@ -27,5 +27,17 @@ namespace UpcomingGames.API.Services
 
 			return _repository.SaveChanges();
 		}
+
+		public async Task<bool> SyncOneGame(I id)
+		{
+			var game = await _gameSource.GetOne(id);
+
+			if (game is null)
+				return false;
+
+			await _repository.Add(game.Game);
+
+			return _repository.SaveChanges() == 1;
+		}
 	}
 }

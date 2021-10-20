@@ -30,5 +30,16 @@ namespace UpcomingGames.API.Controllers
 
 			return BadRequest();
 		}
+
+		[HttpGet("sync/igdb/{id}")]
+		public async Task<IActionResult> SyncOneGameFromIgdb(long id)
+		{
+			var isSuccess = await _igdbSource.SyncOneGame(id);
+
+			if(isSuccess)
+				return Ok($"Synced '{id}' from IGDB!");
+
+			return BadRequest();
+		}
 	}
 }
